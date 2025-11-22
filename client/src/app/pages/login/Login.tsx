@@ -1,13 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { login } from "../../../../types/login.type";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<login>({
+    email: "",
+    password: "",
+  });
 
   const router = useRouter();
 
@@ -17,28 +22,36 @@ export default function Login() {
 
   const sendData = async (e: any) => {
     e.preventDefault();
-    // try {
-    //   await axios.post(`${process.env.NEXT_PUBLIC_API}/data/createData`, data);
-    //   Swal.fire({
-    //     title: "Post Complete",
-    //     icon: "success",
-    //     draggable: true,
-    //   });
-    //   router.push("/");
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+      if (res?.ok && !res.error) {
+        Swal.fire({
+          title: "Login Complete",
+          icon: "success",
+          draggable: true,
+        });
+        router.push("/");
+      } else {
+        alert("Login failed");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <div className="flex flex-col justify-center items-center mt-20">
       <h1 className="font-bold text-5xl text-white">Login</h1>
       <form className="mt-10 flex flex-col gap-5" onSubmit={sendData}>
-        <p className="text-xl text-white">Username</p>
+        <p className="text-xl text-white">Email</p>
         <input
           type="text"
           className="border border-white w-100 h-10 p-3 text-white"
-          onInput={inputValue("username")}
+          onInput={inputValue("email")}
         ></input>
         <p className="text-xl text-white">Password</p>
         <input

@@ -1,13 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { user } from "../../../../types/user.type";
 
 export default function Signup() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<user>({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   const router = useRouter();
 
@@ -17,17 +22,17 @@ export default function Signup() {
 
   const sendData = async (e: any) => {
     e.preventDefault();
-    // try {
-    //   await axios.post(`${process.env.NEXT_PUBLIC_API}/data/createData`, data);
-    //   Swal.fire({
-    //     title: "Post Complete",
-    //     icon: "success",
-    //     draggable: true,
-    //   });
-    //   router.push("/");
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API}/auth/signup`, data);
+      Swal.fire({
+        title: "Sign up Complete",
+        icon: "success",
+        draggable: true,
+      });
+      router.push("/pages/login");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -40,6 +45,12 @@ export default function Signup() {
           className="border border-white w-100 h-10 p-3 text-white"
           onInput={inputValue("username")}
         ></input>
+        <p className="text-xl text-white">Email</p>
+        <input
+          type="text"
+          className="border border-white w-100 h-10 p-3 text-white"
+          onInput={inputValue("email")}
+        ></input>
         <p className="text-xl text-white">Password</p>
         <input
           type="password"
@@ -50,13 +61,13 @@ export default function Signup() {
         <input
           type="password"
           className="border border-white w-100 h-10 p-3 text-white"
-          onInput={inputValue("password")}
+          onInput={inputValue("confirmpassword")}
         ></input>
         <button
           type="submit"
           className="text-2xl bg-white p-3 rounded-md text-black"
         >
-          Login
+          Sign up
         </button>
         <div className="flex justify-center items-center gap-5 mt-5">
           <p className="text-white">Have any account?</p>

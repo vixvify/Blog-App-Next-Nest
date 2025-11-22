@@ -2,7 +2,6 @@ import { Controller } from '@nestjs/common';
 import { Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { DataService } from './data.service';
 import { BlogDTO } from 'DTO/blog.dto';
-import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('data')
 export class DataController {
@@ -13,7 +12,7 @@ export class DataController {
   }
 
   @Get('getSingleData/:id')
-  getSingleData(@Param('id', ParseIntPipe) id: number) {
+  getSingleData(@Param('id') id: string) {
     return this.dataservice.getSingleData(id);
   }
 
@@ -23,12 +22,12 @@ export class DataController {
   }
 
   @Put('updateData/:id')
-  updateData(@Param('id', ParseIntPipe) id: number, @Body() data: BlogDTO) {
+  updateData(@Param('id') id: string, @Body() data: BlogDTO) {
     return this.dataservice.updateData(id, data);
   }
 
   @Delete('deleteData/:id')
-  deleteData(@Param('id', ParseIntPipe) id: number) {
+  deleteData(@Param('id') id: string) {
     return this.dataservice.deleteData(id);
   }
 }
