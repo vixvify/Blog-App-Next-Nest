@@ -27,7 +27,7 @@ export class UserService {
       });
       return { status: 201, msg: 'Sign up Complete' };
     } catch (err) {
-      return { status: 400, error: err };
+      throw err;
     }
   }
   async login(data: LoginDTO) {

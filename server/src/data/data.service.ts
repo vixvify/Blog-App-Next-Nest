@@ -13,7 +13,7 @@ export class DataService {
         await this.prismaservice.blog.findMany();
       return { status: 200, data };
     } catch (err) {
-      return { status: 400, error: err };
+      throw err;
     }
   }
   async createData(data: BlogDTO) {
@@ -28,7 +28,7 @@ export class DataService {
       });
       return { status: 201, msg: 'Post Complete' };
     } catch (err) {
-      return { status: 400, error: err };
+      throw err;
     }
   }
   async getSingleData(id: string) {
@@ -38,7 +38,7 @@ export class DataService {
       );
       return { status: 200, data };
     } catch (err) {
-      return { status: 400, error: err };
+      throw err;
     }
   }
   async updateData(id: string, data: BlogDTO) {
@@ -46,7 +46,7 @@ export class DataService {
       await this.prismaservice.blog.update({ where: { id }, data });
       return { status: 200, msg: 'Update Complete' };
     } catch (err) {
-      return { status: 400, error: err };
+      throw err;
     }
   }
   async deleteData(id: string) {
@@ -54,7 +54,7 @@ export class DataService {
       await this.prismaservice.blog.delete({ where: { id } });
       return { status: 200, msg: 'Delete Complete' };
     } catch (err) {
-      return { status: 400, error: err };
+      throw err;
     }
   }
 }
