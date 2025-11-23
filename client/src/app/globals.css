@@ -5,3 +5,9 @@ body {
   min-height: 100vh;
   background: linear-gradient(140deg, #5c16b6 0%, #2a0845 50%, #07000c 100%);
 }
+.clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

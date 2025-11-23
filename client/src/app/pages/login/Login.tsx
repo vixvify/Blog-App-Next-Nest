@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -13,7 +12,8 @@ export default function Login() {
     email: "",
     password: "",
   });
-
+  const { email, password } = data;
+  const [canSend, setCanSend] = useState(false);
   const router = useRouter();
 
   const inputValue = (fields: string) => {
@@ -35,13 +35,26 @@ export default function Login() {
           draggable: true,
         });
         router.push("/");
-      } else {
-        alert("Login failed");
       }
-    } catch (err) {
+      if (res?.error) {
+        Swal.fire({
+          icon: "error",
+          title: res.error,
+        });
+      }
+    } catch (err: any) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const isFull = email && password;
+    if (isFull) {
+      setCanSend(true);
+    } else {
+      setCanSend(false);
+    }
+  }, [email, password]);
 
   return (
     <div className="flex flex-col justify-center items-center mt-20">
@@ -61,7 +74,8 @@ export default function Login() {
         ></input>
         <button
           type="submit"
-          className="text-2xl bg-white p-3 rounded-md text-black"
+          className="text-2xl bg-white p-3 rounded-md text-black disabled:opacity-20"
+          disabled={!canSend}
         >
           Login
         </button>

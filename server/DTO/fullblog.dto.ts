@@ -1,6 +1,10 @@
 import { IsString, IsNotEmpty } from 'class-validator';
 
-export class BlogDTO {
+export class FullblogDTO {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -12,6 +16,10 @@ export class BlogDTO {
   @IsString()
   @IsNotEmpty()
   author: string;
+
+  @IsString()
+  @IsNotEmpty()
+  createdAt: Date;
 
   @IsString()
   @IsNotEmpty()

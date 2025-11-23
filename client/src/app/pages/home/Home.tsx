@@ -10,7 +10,7 @@ import { FaPen } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 
 export default function Home() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<fullblog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -26,7 +26,7 @@ export default function Home() {
     }
   };
 
-  const confirmDelete = (id: number) => {
+  const confirmDelete = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -41,7 +41,7 @@ export default function Home() {
       }
     });
   };
-  const deleteData = async (id: number) => {
+  const deleteData = async (id: string) => {
     try {
       await axios.delete(
         `${process.env.NEXT_PUBLIC_API}/data/deleteData/${id}`
@@ -69,7 +69,7 @@ export default function Home() {
     );
   } else {
     return (
-      <div className="flex flex-col justify-center items-center mt-10">
+      <div className="flex flex-col justify-center items-center mt-10 mb-20">
         <h1 className="text-5xl text-center text-white font-bold">
           Blog App - By Next.js And Nest.js
         </h1>
@@ -82,7 +82,7 @@ export default function Home() {
                 key={e.id}
               >
                 <h1 className="text-2xl font-bold text-white">{e.title}</h1>
-                <p className="text-white mt-3">{e.content}</p>
+                <p className="text-white mt-3 clamp-3">{e.content}</p>
                 <div className="flex justify-start items-center mt-5 gap-3">
                   <h2 className="font-bold text-white">Author</h2>
                   <p className="text-white">{e.author}</p>
@@ -98,7 +98,7 @@ export default function Home() {
                   <FaTrash
                     style={{ color: "red" }}
                     className="cursor-pointer"
-                    onClick={() => confirmDelete(Number(e.id))}
+                    onClick={() => confirmDelete(e.id)}
                   />
                 </div>
               </div>

@@ -12,9 +12,11 @@ export default function Editform() {
     title: "",
     content: "",
     author: "",
+    userId: "",
   });
-  const [isLoading, setIsLoading] = useState(true);
   const { title, content, author } = data;
+  const [canSend, setCanSend] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const router = useRouter();
 
@@ -31,6 +33,7 @@ export default function Editform() {
       title: data.title,
       content: data.content,
       author: data.author,
+      userId: data.userId,
     });
     setIsLoading(false);
   };
@@ -38,10 +41,12 @@ export default function Editform() {
   const sendData = async (e: any) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `${process.env.NEXT_PUBLIC_API}/data/updateData/${id}`,
-        data
-      );
+      await axios.put(`${process.env.NEXT_PUBLIC_API}/data/updateData/${id}`, {
+        title: data.title,
+        content: data.content,
+        author: data.author,
+        userId: data.userId,
+      });
       Swal.fire({
         title: "Update Complete",
         icon: "success",
@@ -52,6 +57,15 @@ export default function Editform() {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const isFull = title && content && author;
+    if (isFull) {
+      setCanSend(true);
+    } else {
+      setCanSend(false);
+    }
+  }, [title, content, author]);
 
   useEffect(() => {
     getData();
@@ -90,7 +104,8 @@ export default function Editform() {
           ></input>
           <button
             type="submit"
-            className="text-2xl bg-white p-3 rounded-md text-black"
+            className="text-2xl bg-white p-3 rounded-md text-black disabled:opacity-20"
+            disabled={!canSend}
           >
             Update
           </button>

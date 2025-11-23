@@ -1,18 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { user } from "../../../../types/user.type";
+import { register } from "../../../../types/register.type";
 
 export default function Signup() {
-  const [data, setData] = useState<user>({
+  const [data, setData] = useState<register>({
     username: "",
     email: "",
     password: "",
   });
+  const { username, email, password } = data;
+  const [confirmPass, setConfirmPass] = useState("");
+  const [canSend, setCanSend] = useState(false);
 
   const router = useRouter();
 
@@ -34,6 +37,16 @@ export default function Signup() {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const isMatch = password === confirmPass;
+    const isFull = username && email && password && confirmPass;
+    if (isFull && isMatch) {
+      setCanSend(true);
+    } else {
+      setCanSend(false);
+    }
+  }, [username, email, password, confirmPass]);
 
   return (
     <div className="flex flex-col justify-center items-center mt-20">
@@ -61,11 +74,12 @@ export default function Signup() {
         <input
           type="password"
           className="border border-white w-100 h-10 p-3 text-white"
-          onInput={inputValue("confirmpassword")}
+          onInput={(e: any) => setConfirmPass(e.target.value)}
         ></input>
         <button
           type="submit"
-          className="text-2xl bg-white p-3 rounded-md text-black"
+          className="text-2xl bg-white p-3 rounded-md text-black disabled:opacity-20"
+          disabled={!canSend}
         >
           Sign up
         </button>

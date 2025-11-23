@@ -4,4 +4,5 @@ export type fullblog = {
   content: string;
   author: string;
   createdAt: string;
+  userId: string;
 };

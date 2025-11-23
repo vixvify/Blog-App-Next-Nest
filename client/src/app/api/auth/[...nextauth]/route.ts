@@ -26,8 +26,8 @@ export const authOptions: NextAuthOptions = {
             email: foundUser.email,
             accesstoken: user.data.token,
           };
-        } catch (err) {
-          return null;
+        } catch (err: any) {
+          throw new Error(err.response?.data?.message);
         }
       },
     }),
@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ user, account, credentials }) {
+    async signIn() {
       return true;
     },
     async jwt({ token, user }: { token: JWT; user: any }) {
@@ -55,7 +55,7 @@ export const authOptions: NextAuthOptions = {
           username: token.username,
           email: token.email,
         };
-        session.accessToken = token.accessToken;
+        session.accesstoken = token.accesstoken;
       }
       return session;
     },

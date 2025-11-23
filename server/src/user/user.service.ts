@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserDTO } from 'DTO/user.dto';
+import { RegisterDTO } from 'DTO/signup.dto';
 import { LoginDTO } from 'DTO/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { HttpException } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -12,7 +14,7 @@ export class UserService {
     private jwt: JwtService,
   ) {}
 
-  async signup(data: UserDTO) {
+  async signup(data: RegisterDTO) {
     try {
       const { password } = data;
       const hashpass = await bcrypt.hash(password, 10);
@@ -34,14 +36,17 @@ export class UserService {
       const user = await this.prismaservice.user.findUnique({
         where: { email },
       });
-      if (!user) return null;
+      if (!user) {
+        throw new HttpException(
+          "Don't have any account",
+          HttpStatus.BAD_REQUEST,
+        );
+      }
 
       const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch)
-        return {
-          status: 400,
-          msg: 'Wrong password',
-        };
+      if (!isMatch) {
+        throw new HttpException('Wrong password', HttpStatus.BAD_REQUEST);
+      }
 
       const token = this.jwt.sign({
         id: user.id,
@@ -50,7 +55,7 @@ export class UserService {
       });
       return { status: 200, user, token, msg: 'Login Complete' };
     } catch (err) {
-      return { status: 400, error: err };
+      throw err;
     }
   }
 }
