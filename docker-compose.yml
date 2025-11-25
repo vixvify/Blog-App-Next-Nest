@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  server:
+    build: ./server
+    container_name: nest-api
+    restart: always
+    env_file:
+      - ./server/.env
+    ports:
+      - "3001:3001"
+
+  client:
+    build: ./client
+    container_name: next-client
+    restart: always
+    env_file:
+      - ./client/.env
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"

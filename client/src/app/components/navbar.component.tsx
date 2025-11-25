@@ -41,9 +41,11 @@ export default function Navbarcomponent() {
           <Link href={"/"}>
             <li>Home</li>
           </Link>
-          <Link href={"/pages/form"}>
-            <li>Post</li>
-          </Link>
+          {isLogin && (
+            <Link href={"/pages/form"}>
+              <li>Post</li>
+            </Link>
+          )}
           {isLogin && (
             <li className="cursor-pointer" onClick={confirmLogout}>
               Log out

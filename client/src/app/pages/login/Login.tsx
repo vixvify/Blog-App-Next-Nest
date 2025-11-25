@@ -36,12 +36,12 @@ export default function Login() {
         });
         router.push("/");
       }
-      if (res?.error) {
-        Swal.fire({
-          icon: "error",
-          title: res.error,
-        });
-      }
+      // if (res?.error) {
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: res.error,
+      //   });
+      // }
     } catch (err: any) {
       console.log(err);
     }
