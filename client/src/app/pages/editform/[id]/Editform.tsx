@@ -41,6 +41,13 @@ export default function Editform() {
   const sendData = async (e: any) => {
     e.preventDefault();
     try {
+      Swal.fire({
+        title: "Work in process...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       await axios.put(`${process.env.NEXT_PUBLIC_API}/data/updateData/${id}`, {
         title: data.title,
         content: data.content,

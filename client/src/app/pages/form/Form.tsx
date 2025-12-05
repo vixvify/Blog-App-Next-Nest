@@ -27,6 +27,13 @@ export default function Form() {
   const sendData = async (e: any) => {
     e.preventDefault();
     try {
+      Swal.fire({
+        title: "Work in process...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       await axios.post(`${process.env.NEXT_PUBLIC_API}/data/createData`, {
         ...data,
         userId: session?.user.id,

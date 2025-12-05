@@ -44,6 +44,13 @@ export default function Home() {
   };
   const deleteData = async (id: string) => {
     try {
+      Swal.fire({
+        title: "Work in process...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       await axios.delete(
         `${process.env.NEXT_PUBLIC_API}/data/deleteData/${id}`
       );
