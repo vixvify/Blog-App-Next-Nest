@@ -3,6 +3,7 @@ version: "3.9"
 services:
   server:
     build: ./server
+    image: vixvify/blog-server
     container_name: blog-server
     restart: always
     env_file:
@@ -12,6 +13,7 @@ services:
 
   client:
     build: ./client
+    image: vixvify/blog-client
     container_name: blog-client
     restart: always
     env_file:
